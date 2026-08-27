@@ -1,18 +1,13 @@
-import styled from '@emotion/styled';
-
-const Layout = styled.main`
-  padding: var(--space-8);
-`;
-
-const Subtitle = styled.p`
-  color: var(--color-text-muted);
-`;
+import { useTranslation } from 'react-i18next';
+import { Layout, Subtitle } from './App.styles';
 
 export function App() {
+  const { t } = useTranslation();
+
   return (
     <Layout>
-      <h1>BookRoom</h1>
-      <Subtitle>Каркас приложения. Экраны и маршруты появятся на следующих этапах.</Subtitle>
+      <h1>{t('app.title')}</h1>
+      <Subtitle>{t('app.subtitle')}</Subtitle>
     </Layout>
   );
 }

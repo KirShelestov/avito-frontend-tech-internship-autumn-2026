@@ -1,5 +1,6 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react';
+import '../src/shared/i18n';
 import '../src/app/styles/global.css';
 
 const preview: Preview = {
