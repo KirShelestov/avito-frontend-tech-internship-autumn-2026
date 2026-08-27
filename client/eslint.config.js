@@ -2,11 +2,12 @@ import js from '@eslint/js';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import storybook from 'eslint-plugin-storybook';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', 'storybook-static', 'node_modules'] },
+  { ignores: ['dist', 'coverage', 'storybook-static', 'node_modules', '!.storybook'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
@@ -32,8 +33,9 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.config.{js,ts}', 'vite.config.ts'],
+    files: ['**/*.config.{js,ts}', 'vite.config.ts', '.storybook/**/*.{ts,tsx}'],
     extends: [tseslint.configs.disableTypeChecked],
     languageOptions: { globals: globals.node },
   },
+  ...storybook.configs['flat/recommended'],
 );
