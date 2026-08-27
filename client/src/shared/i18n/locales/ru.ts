@@ -15,6 +15,9 @@ export const ru = {
       loading: 'Загрузка…',
       loadError: 'Не удалось загрузить данные',
     },
+    field: {
+      required: 'Обязательное поле',
+    },
   },
 } as const;
 
