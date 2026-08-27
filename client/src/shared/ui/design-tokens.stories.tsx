@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
@@ -33,96 +34,132 @@ const COLORS = [
 ];
 
 const SPACES = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-6', '--space-8'];
-
 const RADII = ['--radius-sm', '--radius-md', '--radius-lg', '--radius-pill'];
-
 const TEXT = ['--text-xs', '--text-sm', '--text-md', '--text-lg', '--text-xl', '--text-2xl'];
+
+const Page = styled.div`
+  padding: var(--space-8);
+  display: grid;
+  gap: var(--space-8);
+  font-family: var(--font-sans);
+  color: var(--color-text);
+`;
+
+const SectionTitle = styled.h2`
+  margin-bottom: var(--space-4);
+`;
+
+const ColorGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+`;
+
+const ColorCard = styled.div`
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+`;
+
+const ColorSwatch = styled.div<{ token: string }>`
+  height: 56px;
+  background: var(${(props) => props.token});
+`;
+
+const TokenCode = styled.code`
+  display: block;
+  padding: var(--space-2);
+  font-size: 12px;
+`;
+
+const Stack = styled.div`
+  display: grid;
+  gap: var(--space-2);
+`;
+
+const SpaceRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+`;
+
+const SpaceBar = styled.div<{ token: string }>`
+  width: var(${(props) => props.token});
+  height: 16px;
+  background: var(--color-brand-500);
+`;
+
+const RadiiRow = styled.div`
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+`;
+
+const RadiiItem = styled.div`
+  text-align: center;
+`;
+
+const RadiiBox = styled.div<{ token: string }>`
+  width: 72px;
+  height: 72px;
+  background: var(--color-brand-100);
+  border: 1px solid var(--color-brand-500);
+  border-radius: var(${(props) => props.token});
+`;
+
+const TextSample = styled.div<{ token: string }>`
+  font-size: var(${(props) => props.token});
+`;
 
 export const Overview: Story = {
   render: () => (
-    <div
-      style={{
-        padding: 'var(--space-8)',
-        display: 'grid',
-        gap: 'var(--space-8)',
-        fontFamily: 'var(--font-sans)',
-        color: 'var(--color-text)',
-      }}
-    >
+    <Page>
       <section>
-        <h2 style={{ marginBottom: 'var(--space-4)' }}>Цвета</h2>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-            gap: 'var(--space-3)',
-          }}
-        >
+        <SectionTitle>Цвета</SectionTitle>
+        <ColorGrid>
           {COLORS.map((token) => (
-            <div
-              key={token}
-              style={{
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-md)',
-                overflow: 'hidden',
-              }}
-            >
-              <div style={{ height: 56, background: `var(${token})` }} />
-              <code style={{ display: 'block', padding: 'var(--space-2)', fontSize: 12 }}>
-                {token}
-              </code>
-            </div>
+            <ColorCard key={token}>
+              <ColorSwatch token={token} />
+              <TokenCode>{token}</TokenCode>
+            </ColorCard>
           ))}
-        </div>
+        </ColorGrid>
       </section>
 
       <section>
-        <h2 style={{ marginBottom: 'var(--space-4)' }}>Отступы</h2>
-        <div style={{ display: 'grid', gap: 'var(--space-2)' }}>
+        <SectionTitle>Отступы</SectionTitle>
+        <Stack>
           {SPACES.map((token) => (
-            <div
-              key={token}
-              style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}
-            >
-              <div
-                style={{ width: `var(${token})`, height: 16, background: 'var(--color-brand-500)' }}
-              />
-              <code style={{ fontSize: 12 }}>{token}</code>
-            </div>
+            <SpaceRow key={token}>
+              <SpaceBar token={token} />
+              <TokenCode>{token}</TokenCode>
+            </SpaceRow>
           ))}
-        </div>
+        </Stack>
       </section>
 
       <section>
-        <h2 style={{ marginBottom: 'var(--space-4)' }}>Скругления</h2>
-        <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap' }}>
+        <SectionTitle>Скругления</SectionTitle>
+        <RadiiRow>
           {RADII.map((token) => (
-            <div key={token} style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  width: 72,
-                  height: 72,
-                  background: 'var(--color-brand-100)',
-                  border: '1px solid var(--color-brand-500)',
-                  borderRadius: `var(${token})`,
-                }}
-              />
-              <code style={{ fontSize: 12 }}>{token}</code>
-            </div>
+            <RadiiItem key={token}>
+              <RadiiBox token={token} />
+              <TokenCode>{token}</TokenCode>
+            </RadiiItem>
           ))}
-        </div>
+        </RadiiRow>
       </section>
 
       <section>
-        <h2 style={{ marginBottom: 'var(--space-4)' }}>Типографика</h2>
-        <div style={{ display: 'grid', gap: 'var(--space-2)' }}>
+        <SectionTitle>Типографика</SectionTitle>
+        <Stack>
           {TEXT.map((token) => (
-            <div key={token} style={{ fontSize: `var(${token})` }}>
+            <TextSample key={token} token={token}>
               {token}: Съешь ещё этих мягких французских булок
-            </div>
+            </TextSample>
           ))}
-        </div>
+        </Stack>
       </section>
-    </div>
+    </Page>
   ),
 };
