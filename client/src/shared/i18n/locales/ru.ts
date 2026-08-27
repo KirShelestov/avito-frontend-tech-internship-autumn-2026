@@ -18,6 +18,9 @@ export const ru = {
     field: {
       required: 'Обязательное поле',
     },
+    breadcrumbs: {
+      label: 'Навигационная цепочка',
+    },
   },
 } as const;
 
