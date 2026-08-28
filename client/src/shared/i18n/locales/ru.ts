@@ -7,6 +7,7 @@ export const ru = {
     actions: {
       retry: 'Попробовать снова',
       cancel: 'Отмена',
+      close: 'Закрыть',
       book: 'Забронировать',
       details: 'Подробнее',
       resetFilters: 'Сбросить фильтры',
