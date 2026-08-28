@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:msw": "VITE_USE_MSW=true vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -70,5 +71,10 @@
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.9"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
