@@ -22,6 +22,12 @@ export const ru = {
     breadcrumbs: {
       label: 'Навигационная цепочка',
     },
+    calendar: {
+      label: 'Выбор даты',
+      prevMonth: 'Предыдущий месяц',
+      nextMonth: 'Следующий месяц',
+      open: 'Выбрать дату',
+    },
   },
 } as const;
 
