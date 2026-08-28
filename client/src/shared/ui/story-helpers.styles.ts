@@ -12,3 +12,8 @@ export const Column = styled.div`
   flex-direction: column;
   gap: var(--space-3);
 `;
+
+export const StoryFrame = styled.div`
+  width: 360px;
+  max-width: 100%;
+`;

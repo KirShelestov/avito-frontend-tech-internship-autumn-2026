@@ -27,6 +27,14 @@ export const ru = {
       details: 'Подробнее',
       resetFilters: 'Сбросить фильтры',
     },
+    room: {
+      floor: '{{floor}} этаж',
+      capacity: 'Вместимость: до {{count}} человек',
+      availableForSlot: 'Доступно на выбранное время',
+      unavailableForSlot: 'Недоступно на выбранное время',
+      freeAllDay: 'Свободна весь день',
+      busyUntil: 'Занята до {{time}}',
+    },
     states: {
       loading: 'Загрузка…',
       loadError: 'Не удалось загрузить данные',
