@@ -25,7 +25,8 @@ function renderApp(initialPath: string) {
 describe('маршрутизация', () => {
   it('перенаправляет / на /rooms', async () => {
     renderApp('/');
-    expect(await screen.findByRole('heading', { name: 'Переговорные' })).toBeInTheDocument();
+    // на /rooms есть переключатель офиса
+    expect(await screen.findByLabelText('Выберите офис')).toBeInTheDocument();
   });
 
   it('открывает /bookings', async () => {
@@ -46,7 +47,7 @@ describe('маршрутизация', () => {
 
   it('навигация по табам меняет маршрут', async () => {
     const { user } = renderApp('/rooms');
-    await screen.findByRole('heading', { name: 'Переговорные' });
+    await screen.findByLabelText('Выберите офис');
 
     await user.click(screen.getByRole('link', { name: 'Мои бронирования' }));
 

@@ -20,6 +20,7 @@ export interface TimeFieldProps {
   placeholder?: string;
   id?: string;
   className?: string;
+  'aria-label'?: string;
 }
 
 export function TimeField({
@@ -37,6 +38,7 @@ export function TimeField({
   placeholder = 'чч:мм',
   id,
   className,
+  'aria-label': ariaLabel,
 }: TimeFieldProps) {
   const autoId = useId();
   const controlId = id ?? autoId;
@@ -99,6 +101,7 @@ export function TimeField({
           required={required}
           maxLength={5}
           $invalid={Boolean(error)}
+          aria-label={ariaLabel}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           onChange={(event) => {

@@ -63,6 +63,16 @@ export function snapTime(
   return minutesToTime(clamped);
 }
 
+/** 15 → «15 мин», 75 → «1 ч 15 мин», 120 → «2 ч» */
+export function formatDuration(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const parts: string[] = [];
+  if (hours > 0) parts.push(`${hours} ч`);
+  if (rest > 0) parts.push(`${rest} мин`);
+  return parts.join(' ') || '0 мин';
+}
+
 export function stepTime(
   value: string,
   deltaSteps: number,
