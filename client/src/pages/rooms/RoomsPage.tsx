@@ -1,0 +1,6 @@
+import { useTranslation } from 'react-i18next';
+
+export function RoomsPage() {
+  const { t } = useTranslation();
+  return <h1>{t('nav.rooms')}</h1>;
+}
