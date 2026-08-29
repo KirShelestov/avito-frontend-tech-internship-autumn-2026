@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Server, WebSocket as MockWebSocket } from 'mock-socket';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ConnectionStatusBanner } from './ConnectionStatusBanner';
 import { ToastProvider } from '@/shared/ui/toast';
 import { RealtimeProvider } from './RealtimeProvider';
 import { useRealtimeStatus } from './realtime-context';
@@ -37,6 +38,7 @@ function renderProvider() {
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
         <RealtimeProvider url={WS_URL} webSocketImpl={MockWebSocket}>
+          <ConnectionStatusBanner />
           <StatusProbe />
         </RealtimeProvider>
       </ToastProvider>
@@ -79,6 +81,27 @@ describe('RealtimeProvider', () => {
         expect.objectContaining({ queryKey: ['room-schedule', 'room-everest'] }),
       );
     });
+  });
+
+  it('после разрыва показывает баннер и переподключается с resync', async () => {
+    const { invalidateSpy } = renderProvider();
+    await waitFor(() => expect(screen.getByTestId('status')).toHaveTextContent('open'));
+    expect(screen.queryByRole('status', { name: /Соединение потеряно/ })).not.toBeInTheDocument();
+
+    server.close();
+    server.stop();
+
+    expect(await screen.findByText('Соединение потеряно. Переподключение…')).toBeInTheDocument();
+
+    invalidateSpy.mockClear();
+    server = new Server(WS_URL);
+
+    await waitFor(() => expect(screen.getByTestId('status')).toHaveTextContent('open'));
+    await waitFor(() => {
+      // resync: инвалидация без конкретного ключа
+      expect(invalidateSpy).toHaveBeenCalledWith({ refetchType: 'active' });
+    });
+    expect(screen.queryByText('Соединение потеряно. Переподключение…')).not.toBeInTheDocument();
   });
 
   it('по data.reset очищает кэш', async () => {

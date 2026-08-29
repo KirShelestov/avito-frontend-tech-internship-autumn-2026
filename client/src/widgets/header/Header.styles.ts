@@ -64,3 +64,16 @@ export const UserBox = styled.div`
   gap: var(--space-3);
   color: var(--color-text);
 `;
+
+export const ConnectionDot = styled.span<{ $tone: 'ok' | 'wait' | 'off' }>`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: ${(props) =>
+    props.$tone === 'ok'
+      ? 'var(--color-brand-500)'
+      : props.$tone === 'wait'
+        ? 'var(--color-warning-bg)'
+        : 'var(--color-text-subtle)'};
+`;

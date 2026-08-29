@@ -1,12 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createRealtimeClient, type RealtimeEvent, type RealtimeStatus } from '@/shared/api';
 import { env } from '@/shared/config/env';
 import { useMe } from '@/entities/user';
 import { useToast } from '@/shared/ui';
 import { invalidationsForEvent } from './event-invalidation';
-import { RealtimeStatusContext } from './realtime-context';
+import { RealtimeContext } from './realtime-context';
 
 export interface RealtimeProviderProps {
   children: ReactNode;
@@ -29,10 +29,12 @@ export function RealtimeProvider({
   const { data: me } = useMe();
 
   const [status, setStatus] = useState<RealtimeStatus>(disabled ? 'closed' : 'connecting');
+  const [everConnected, setEverConnected] = useState(false);
 
   const meId = me?.id;
   const pending = useRef(new Map<string, string[]>());
   const flushTimer = useRef<ReturnType<typeof setTimeout>>();
+  const everConnectedRef = useRef(false);
 
   useEffect(() => {
     if (disabled) return;
@@ -60,10 +62,22 @@ export function RealtimeProvider({
       }
     };
 
+    const handleStatus = (next: RealtimeStatus) => {
+      setStatus(next);
+      if (next === 'open') {
+        if (everConnectedRef.current) {
+          // Журнала пропущенных событий нет, поэтому после разрыва перечитываем всё
+          void queryClient.invalidateQueries({ refetchType: 'active' });
+        }
+        everConnectedRef.current = true;
+        setEverConnected(true);
+      }
+    };
+
     const client = createRealtimeClient({
       url: url ?? env.wsUrl,
       onEvent: handleEvent,
-      onStatusChange: setStatus,
+      onStatusChange: handleStatus,
       ...(webSocketImpl ? { WebSocketImpl: webSocketImpl } : {}),
     });
 
@@ -73,5 +87,10 @@ export function RealtimeProvider({
     };
   }, [disabled, url, webSocketImpl, queryClient, toast, t, meId]);
 
-  return <RealtimeStatusContext.Provider value={status}>{children}</RealtimeStatusContext.Provider>;
+  const value = useMemo(
+    () => ({ status, isReconnecting: everConnected && status !== 'open' }),
+    [status, everConnected],
+  );
+
+  return <RealtimeContext.Provider value={value}>{children}</RealtimeContext.Provider>;
 }

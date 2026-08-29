@@ -1,8 +1,9 @@
 import { CalendarCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMe } from '@/entities/user';
+import { useRealtimeStatus } from '@/features/realtime';
 import { Avatar } from '@/shared/ui';
-import { Bar, Brand, BrandMark, Nav, NavItem, UserBox } from './Header.styles';
+import { Bar, Brand, BrandMark, ConnectionDot, Nav, NavItem, UserBox } from './Header.styles';
 
 /** «Константин Кузнецов» → «Константин К.» */
 function shortName(displayName: string): string {
@@ -13,6 +14,14 @@ function shortName(displayName: string): string {
 export function Header() {
   const { t } = useTranslation();
   const { data: me } = useMe();
+  const status = useRealtimeStatus();
+
+  const dot =
+    status === 'open'
+      ? { tone: 'ok' as const, label: t('realtime.statusOnline') }
+      : status === 'connecting'
+        ? { tone: 'wait' as const, label: t('realtime.statusConnecting') }
+        : { tone: 'off' as const, label: t('realtime.statusOffline') };
 
   return (
     <Bar>
@@ -28,12 +37,15 @@ export function Header() {
         <NavItem to="/bookings">{t('nav.bookings')}</NavItem>
       </Nav>
 
-      {me && (
-        <UserBox>
-          <span>{shortName(me.displayName)}</span>
-          <Avatar name={me.displayName} initials={me.initials} src={me.avatarUrl} />
-        </UserBox>
-      )}
+      <UserBox>
+        <ConnectionDot $tone={dot.tone} role="status" aria-label={dot.label} title={dot.label} />
+        {me && (
+          <>
+            <span>{shortName(me.displayName)}</span>
+            <Avatar name={me.displayName} initials={me.initials} src={me.avatarUrl} />
+          </>
+        )}
+      </UserBox>
     </Bar>
   );
 }

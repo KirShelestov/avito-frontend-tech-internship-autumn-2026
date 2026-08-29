@@ -45,6 +45,9 @@ export const ru = {
     realtime: {
       dataReset: 'Данные обновлены',
       reconnecting: 'Соединение потеряно. Переподключение…',
+      statusOnline: 'Обновления в реальном времени активны',
+      statusConnecting: 'Подключение к обновлениям…',
+      statusOffline: 'Нет связи с сервером обновлений',
     },
     breadcrumbs: {
       label: 'Навигационная цепочка',

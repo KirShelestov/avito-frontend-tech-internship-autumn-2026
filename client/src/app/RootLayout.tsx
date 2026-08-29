@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { ConnectionStatusBanner } from '@/features/realtime';
 import { Header } from '@/widgets/header';
 
 const Content = styled.div`
@@ -18,6 +19,7 @@ export function RootLayout() {
 
   return (
     <>
+      <ConnectionStatusBanner />
       <Header />
       <Content>
         <Outlet />
