@@ -1,9 +1,11 @@
 import { Monitor, PenLine, Users, Video, type LucideIcon } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useRoomSchedule } from '@/entities/booking';
 import { useRoom } from '@/entities/room';
 import { useMe } from '@/entities/user';
+import { CreateBookingDialog } from '@/features/create-booking';
 import { NotFoundPage } from '@/pages/not-found';
 import { RoomSchedule } from '@/widgets/room-schedule';
 import { HttpError, type RoomFeature } from '@/shared/api';
@@ -42,6 +44,7 @@ export function RoomDetailsPage() {
 
   const roomQuery = useRoom(roomId);
   const { data: me } = useMe();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   const timezone = roomQuery.data?.office.timezone ?? 'Europe/Moscow';
   const date = params.get('date') ?? todayISODate(timezone);
@@ -134,11 +137,15 @@ export function RoomDetailsPage() {
             date={date}
             onDateChange={setDate}
             onBookRoom={() => {
-              /* модалка бронирования появится на следующем этапе */
+              setBookingOpen(true);
             }}
           />
         )}
       </Columns>
+
+      {bookingOpen && (
+        <CreateBookingDialog open room={room} initialDate={date} onOpenChange={setBookingOpen} />
+      )}
     </>
   );
 }

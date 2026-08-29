@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOffices } from '@/entities/office';
 import { RoomCard, useRooms } from '@/entities/room';
+import { CreateBookingDialog } from '@/features/create-booking';
 import { OfficeSwitcher } from '@/features/office-switcher';
 import { RoomsFilterBar, useRoomsFilters } from '@/features/rooms-filters';
 import type { RoomSummary } from '@/shared/api';
@@ -42,7 +43,7 @@ export function RoomsPage() {
     reset,
   } = useRoomsFilters(officesQuery.data);
 
-  const [, setBookingRoom] = useState<RoomSummary | null>(null);
+  const [bookingRoom, setBookingRoom] = useState<RoomSummary | null>(null);
 
   const roomsQuery = useRooms({
     officeId: filters.officeId ?? undefined,
@@ -106,6 +107,18 @@ export function RoomsPage() {
             ))}
           </Grid>
         </>
+      )}
+
+      {bookingRoom && (
+        <CreateBookingDialog
+          open
+          room={bookingRoom}
+          initialDate={filters.date}
+          initialStart={filters.start}
+          onOpenChange={(next) => {
+            if (!next) setBookingRoom(null);
+          }}
+        />
       )}
     </>
   );
