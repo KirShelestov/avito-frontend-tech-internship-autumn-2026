@@ -71,6 +71,41 @@ describe('CreateBookingDialog', () => {
     });
   });
 
+  it('серия: создаёт несколько броней и показывает сводку', async () => {
+    const { user } = renderDialog();
+
+    await user.type(screen.getByLabelText(/Тема встречи/), 'Ежедневный синк');
+    await user.selectOptions(screen.getByLabelText('Повторять'), 'weekly');
+    await user.click(screen.getByRole('button', { name: 'Забронировать' }));
+
+    expect(await screen.findByRole('dialog', { name: 'Серия бронирований' })).toBeInTheDocument();
+    expect(screen.getByText(/Создано \d+ из \d+/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Готово' })).toBeInTheDocument();
+  });
+
+  it('серия: помечает конфликтные даты в сводке', async () => {
+    let call = 0;
+    mswServer.use(
+      http.post(`${env.apiUrl}/api/v1/bookings`, () => {
+        call += 1;
+        if (call === 1) {
+          return HttpResponse.json(
+            { error: { code: 'BOOKING_CONFLICT', message: 'занято' } },
+            { status: 409 },
+          );
+        }
+        return HttpResponse.json({ id: `b${String(call)}` }, { status: 201 });
+      }),
+    );
+
+    const { user } = renderDialog();
+    await user.type(screen.getByLabelText(/Тема встречи/), 'Синк');
+    await user.selectOptions(screen.getByLabelText('Повторять'), 'weekly');
+    await user.click(screen.getByRole('button', { name: 'Забронировать' }));
+
+    expect(await screen.findByText(/Заняты даты:/)).toBeInTheDocument();
+  });
+
   it('при 409 показывает модалку конфликта и возвращает к форме', async () => {
     mswServer.use(
       http.post(`${env.apiUrl}/api/v1/bookings`, () =>

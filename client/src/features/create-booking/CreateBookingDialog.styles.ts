@@ -31,6 +31,25 @@ export const FieldError = styled.span`
   color: var(--color-danger-600);
 `;
 
+export const SeriesResult = styled.div`
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-muted);
+`;
+
+export const SeriesLine = styled.p<{ $tone?: 'ok' | 'warn' }>`
+  font-size: var(--text-sm);
+  color: ${(props) =>
+    props.$tone === 'warn' ? 'var(--color-danger-600)' : 'var(--color-text-muted)'};
+
+  b {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+`;
+
 export const Preview = styled.p`
   display: flex;
   align-items: center;

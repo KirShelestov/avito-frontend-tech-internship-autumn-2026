@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { z } from 'zod';
+import type { RecurrenceFrequency } from '@/features/recurring-booking';
 import { isAlignedToStep } from '@/shared/lib/time';
 
 export interface BookingFormValues {
@@ -8,6 +9,8 @@ export interface BookingFormValues {
   start: string;
   duration: number;
   comment: string;
+  repeat: RecurrenceFrequency;
+  repeatUntil: string;
 }
 
 export interface SchemaContext {
@@ -43,6 +46,8 @@ export function createBookingSchema({ timezone, now }: SchemaContext) {
       start: z.string().regex(/^\d{2}:\d{2}$/),
       duration: z.number().int().positive(),
       comment: z.string().trim().max(2000),
+      repeat: z.enum(['none', 'daily', 'weekly', 'weekdays']),
+      repeatUntil: z.string(),
     })
     .superRefine((values, ctx) => {
       const startDt = DateTime.fromISO(toStartIso(values, timezone), { setZone: true });

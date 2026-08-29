@@ -11,6 +11,8 @@ const base: BookingFormValues = {
   start: '10:00',
   duration: 60,
   comment: '',
+  repeat: 'none',
+  repeatUntil: '2026-10-21',
 };
 
 const messages = (values: BookingFormValues): Record<string, string> => {
