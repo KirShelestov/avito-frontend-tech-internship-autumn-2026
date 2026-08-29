@@ -99,6 +99,9 @@ export async function buildApp(options: AppOptions = {}): Promise<FastifyInstanc
 
   await app.register(cors, {
     origin: config.corsOrigins,
+    // @fastify/cors v11 по умолчанию разрешает только GET,HEAD,POST,
+    // из-за этого preflight для DELETE /bookings/:id падал в браузере.
+    methods: ['GET', 'HEAD', 'POST', 'DELETE'],
   });
   if (config.environment !== 'production') {
     const [{ default: swagger }, { default: swaggerUi }] = await Promise.all([

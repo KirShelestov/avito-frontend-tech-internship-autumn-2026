@@ -11,6 +11,8 @@ dist
 dist-ssr
 coverage
 storybook-static
+test-results
+playwright-report
 *.local
 
 # Env

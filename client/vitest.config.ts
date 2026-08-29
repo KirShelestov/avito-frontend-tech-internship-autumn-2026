@@ -17,11 +17,27 @@ export default defineConfig({
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'src/**/*.stories.tsx',
+        'src/**/*.styles.ts',
         'src/**/*.{test,spec}.{ts,tsx}',
         'src/**/index.ts',
         'src/main.tsx',
+        'src/vite-env.d.ts',
+        'src/app/App.tsx',
+        'src/app/router.tsx',
+        'src/app/routes.tsx',
+        'src/app/RouteError.tsx',
+        'src/app/providers/**',
+        'src/shared/i18n/**',
         'src/shared/test/**',
+        'src/shared/ui/story-helpers.styles.ts',
       ],
+      // Ориентир, а не жёсткий гейт: проверяется локально
+      thresholds: {
+        statements: 80,
+        branches: 75,
+        functions: 80,
+        lines: 80,
+      },
     },
   },
 });
