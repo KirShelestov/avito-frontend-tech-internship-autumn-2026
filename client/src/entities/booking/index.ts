@@ -1,0 +1,1 @@
+export { useRoomSchedule } from './useRoomSchedule';

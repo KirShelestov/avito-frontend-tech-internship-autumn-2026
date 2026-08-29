@@ -59,6 +59,19 @@ export const ru = {
       capacityAny: 'Не указано',
       capacityValue: 'Мин. {{count}} чел.',
     },
+    schedule: {
+      heading: 'Расписание на день',
+      pickDate: 'Выбрать дату',
+      busy: 'Занято',
+      bookRoom: 'Забронировать комнату',
+      errorText: 'Произошла ошибка при загрузке расписания переговорной',
+      errorTitle: 'Не удалось загрузить расписание',
+    },
+    roomDetails: {
+      crumbRooms: 'Переговорные',
+      crumbRoom: 'Комната «{{name}}»',
+      capacity: 'Вместимость: до {{count}} человек',
+    },
     rooms: {
       heading: 'Доступные переговорные в этом офисе',
       loading: 'Загрузка переговорных…',

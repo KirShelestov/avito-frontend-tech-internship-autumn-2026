@@ -43,6 +43,19 @@ export function formatTimeInZone(iso: string, zone: string): string {
   return DateTime.fromISO(iso).setZone(zone).toFormat('HH:mm');
 }
 
+export function dayBoundsIso(dateIso: string, zone: string): { from: string; to: string } {
+  const start = DateTime.fromISO(dateIso, { zone }).startOf('day');
+  return {
+    from: start.toISO({ suppressMilliseconds: true }) ?? '',
+    to: start.plus({ days: 1 }).toISO({ suppressMilliseconds: true }) ?? '',
+  };
+}
+
+export function minutesOfDayInZone(iso: string, zone: string): number {
+  const dt = DateTime.fromISO(iso).setZone(zone);
+  return dt.hour * 60 + dt.minute;
+}
+
 /** Например, «MSK» */
 export function zoneAbbr(zone: string, reference: DateTime = now()): string {
   return reference.setZone(zone).toFormat('ZZZZ');
