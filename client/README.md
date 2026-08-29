@@ -37,15 +37,29 @@ npm run dev            # http://localhost:5173
 
 ## Скрипты
 
-| Команда                           | Назначение                    |
-| --------------------------------- | ----------------------------- |
-| `npm run dev`                     | dev-сервер Vite               |
-| `npm run build`                   | production-сборка в `dist/`   |
-| `npm run preview`                 | предпросмотр собранной версии |
-| `npm run lint`                    | ESLint                        |
-| `npm run format` / `format:check` | Prettier                      |
-| `npm run typecheck`               | проверка типов                |
-| `npm run check`                   | формат + lint + типы          |
+| Команда                           | Назначение                          |
+| --------------------------------- | ----------------------------------- |
+| `npm run dev`                     | dev-сервер Vite                     |
+| `npm run build`                   | production-сборка в `dist/`         |
+| `npm run preview`                 | предпросмотр собранной версии       |
+| `npm test`                        | юнит- и компонентные тесты (Vitest) |
+| `npm run coverage`                | тесты с отчётом покрытия            |
+| `npm run e2e`                     | end-to-end тесты (Playwright)       |
+| `npm run storybook`               | Storybook на :6006                  |
+| `npm run lint`                    | ESLint                              |
+| `npm run format` / `format:check` | Prettier                            |
+| `npm run typecheck`               | проверка типов                      |
+| `npm run check`                   | формат + lint + типы + тесты        |
+
+## Тесты
+
+- **Юнит и компонентные**: Vitest + Testing Library + MSW. Покрывают `shared/lib`
+  (даты, интервалы, форматтеры), `http`/`ws`, zod-схемы, маппинг WebSocket-событий,
+  а также каждый экран во всех состояниях (loading / error / empty / данные) и
+  обработку конфликта `409`. Ориентир покрытия 80%+ по statements, фактически ~96%.
+- **End-to-end**: Playwright против настоящего бэкенда из `../server`. Перед первым
+  запуском: `npx playwright install chromium`. Каждый тест начинается со сброса данных
+  через `POST /api/v1/test/reset`.
 
 ## Переменные окружения
 
@@ -70,3 +84,7 @@ src/
 ```
 
 Правило импортов: слой видит только слои ниже (`app → pages → widgets → features → entities → shared`).
+
+Стратегия real-time, работа с таймзонами и список принятых решений (приватность чужих
+броней, фильтры в URL, инвалидация вместо патча кэша, поведение при `data.reset`,
+разворачивание повторяющихся броней) описаны в [корневом README](../README.md).

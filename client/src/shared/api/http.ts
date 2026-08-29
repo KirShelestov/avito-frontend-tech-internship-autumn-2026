@@ -33,11 +33,11 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   const timeout = setTimeout(() => {
     controller.abort(new DOMException('Timeout', 'TimeoutError'));
   }, timeoutMs);
-  if (signal) {
-    signal.addEventListener('abort', () => {
-      controller.abort(signal.reason);
-    });
-  }
+  const forwardAbort = () => {
+    controller.abort(signal?.reason);
+  };
+  if (signal?.aborted) forwardAbort();
+  else signal?.addEventListener('abort', forwardAbort, { once: true });
 
   let response: Response;
   try {
@@ -57,6 +57,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     throw new NetworkError();
   } finally {
     clearTimeout(timeout);
+    signal?.removeEventListener('abort', forwardAbort);
   }
 
   if (response.status === 204) {

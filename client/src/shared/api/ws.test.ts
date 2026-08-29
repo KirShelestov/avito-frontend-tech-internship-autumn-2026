@@ -51,6 +51,45 @@ describe('createRealtimeClient', () => {
     client.close();
   });
 
+  it('по умолчанию не рвёт тихое соединение', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    makeServer();
+    const statuses: RealtimeStatus[] = [];
+    const client = createRealtimeClient({
+      url: URL,
+      onStatusChange: (s) => statuses.push(s),
+      WebSocketImpl: MockWebSocket,
+      jitter: () => 0,
+    });
+    try {
+      await vi.waitFor(() => expect(client.getStatus()).toBe('open'));
+
+      await vi.advanceTimersByTimeAsync(5 * 60_000);
+
+      expect(client.getStatus()).toBe('open');
+      expect(statuses).toEqual(['open']);
+    } finally {
+      client.close();
+      vi.useRealTimers();
+    }
+  });
+
+  it('с heartbeatTimeoutMs переподключается после тишины', async () => {
+    makeServer();
+    const statuses: RealtimeStatus[] = [];
+    const client = createRealtimeClient({
+      url: URL,
+      onStatusChange: (s) => statuses.push(s),
+      WebSocketImpl: MockWebSocket,
+      heartbeatTimeoutMs: 30,
+      backoffMs: [10],
+      jitter: () => 0,
+    });
+
+    await vi.waitFor(() => expect(statuses.filter((s) => s === 'open')).toHaveLength(2));
+    client.close();
+  });
+
   it('после внезапного обрыва переходит в connecting и переподключается', async () => {
     const server = makeServer();
     const client = createRealtimeClient({

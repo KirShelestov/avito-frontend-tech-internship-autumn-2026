@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react';
 import { Fragment, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Current, Item, List, Nav, Separator } from './Breadcrumbs.styles';
@@ -30,7 +31,11 @@ export function Breadcrumbs({ items, label, className }: BreadcrumbsProps) {
                   <a href={item.href}>{item.label}</a>
                 )}
               </Item>
-              {!isLast && <Separator aria-hidden="true">›</Separator>}
+              {!isLast && (
+                <Separator aria-hidden="true">
+                  <ChevronRight size={14} strokeWidth={2.5} />
+                </Separator>
+              )}
             </Fragment>
           );
         })}

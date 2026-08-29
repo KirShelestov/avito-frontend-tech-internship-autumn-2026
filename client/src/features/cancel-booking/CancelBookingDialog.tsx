@@ -1,9 +1,9 @@
-import { CalendarDays, DoorClosed } from 'lucide-react';
+import { Calendar, DoorOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { BookingView } from '@/shared/api';
 import { formatDateInZone, formatTimeInZone } from '@/shared/lib/datetime';
 import { Button, Modal } from '@/shared/ui';
-import { Summary, SummaryRow, SummaryTitle } from './CancelBookingDialog.styles';
+import { Actions, Summary, SummaryRow, SummaryTitle } from './CancelBookingDialog.styles';
 import { useCancelBooking } from './useCancelBooking';
 
 export interface CancelBookingDialogProps {
@@ -32,24 +32,24 @@ export function CancelBookingDialog({ booking, onOpenChange }: CancelBookingDial
       title={t('cancelBooking.title')}
       description={t('cancelBooking.text')}
       footer={
-        <>
-          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+        <Actions>
+          <Button variant="secondary" fullWidth onClick={() => onOpenChange(false)}>
             {t('cancelBooking.keep')}
           </Button>
-          <Button variant="danger" onClick={confirm}>
+          <Button variant="danger" fullWidth onClick={confirm}>
             {t('cancelBooking.confirm')}
           </Button>
-        </>
+        </Actions>
       }
     >
       <Summary>
         <SummaryTitle>{booking.title}</SummaryTitle>
         <SummaryRow>
-          <DoorClosed size={14} />
+          <DoorOpen size={18} />
           {t('cancelBooking.room', { room: booking.room.name, floor: booking.room.floor })}
         </SummaryRow>
         <SummaryRow>
-          <CalendarDays size={14} />
+          <Calendar size={18} />
           {t('cancelBooking.when', {
             date: formatDateInZone(booking.startsAt, zone),
             start: formatTimeInZone(booking.startsAt, zone),

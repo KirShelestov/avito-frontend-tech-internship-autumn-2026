@@ -6,8 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# остальной код приезжает через bind-mount в docker-compose,
-# копия нужна только чтобы образ собирался и без volume
+# При docker compose перекрывается bind-mount'ом; нужно для сборки образа без volume.
 COPY . .
 
 EXPOSE 3000

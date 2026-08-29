@@ -2,23 +2,33 @@ import styled from '@emotion/styled';
 import { NavLink } from 'react-router-dom';
 
 export const Bar = styled.header`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-6);
   height: var(--header-height);
-  padding: 0 var(--space-6);
+  padding: 0 var(--page-gutter);
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
+
+  @media (max-width: 720px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-4);
+    height: auto;
+    padding: var(--space-3) var(--space-4) 0;
+  }
 `;
 
 export const Brand = styled.div`
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-lg);
+  gap: var(--space-3);
+  font-size: var(--text-xl);
   font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--color-text);
+  white-space: nowrap;
 `;
 
 export const BrandMark = styled.span`
@@ -34,14 +44,32 @@ export const BrandMark = styled.span`
 
 export const Nav = styled.nav`
   display: flex;
-  gap: var(--space-6);
+  align-self: stretch;
+  gap: var(--space-8);
+
+  @media (max-width: 720px) {
+    order: 3;
+    width: 100%;
+    margin-top: var(--space-1);
+  }
 `;
 
 export const NavItem = styled(NavLink)`
   position: relative;
-  padding: calc((var(--header-height) - var(--text-md)) / 2 - 1px) 0;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+
+  @media (max-width: 720px) {
+    padding: var(--space-3) 0;
+  }
+
+  &:hover {
+    color: var(--color-text);
+  }
 
   &.active {
     color: var(--color-brand-600);
@@ -61,8 +89,22 @@ export const NavItem = styled(NavLink)`
 export const UserBox = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-3);
+  font-size: var(--text-md);
+  font-weight: 500;
   color: var(--color-text);
+  white-space: nowrap;
+
+  @media (max-width: 720px) {
+    margin-left: auto;
+  }
+`;
+
+export const UserName = styled.span`
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const ConnectionDot = styled.span<{ $tone: 'ok' | 'wait' | 'off' }>`

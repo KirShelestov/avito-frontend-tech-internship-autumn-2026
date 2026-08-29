@@ -1,14 +1,8 @@
-import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { ConnectionStatusBanner } from '@/features/realtime';
 import { Header } from '@/widgets/header';
-
-const Content = styled.div`
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--space-6);
-`;
+import { Main } from './RootLayout.styles';
 
 export function RootLayout() {
   const { pathname } = useLocation();
@@ -21,9 +15,9 @@ export function RootLayout() {
     <>
       <ConnectionStatusBanner />
       <Header />
-      <Content>
+      <Main>
         <Outlet />
-      </Content>
+      </Main>
     </>
   );
 }

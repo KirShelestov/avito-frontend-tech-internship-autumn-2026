@@ -7,7 +7,7 @@ export const AvatarRoot = styled.span<{ $size: number }>`
   width: ${(props) => props.$size}px;
   height: ${(props) => props.$size}px;
   border-radius: 50%;
-  background-color: var(--color-brand-500);
+  background-color: var(--color-avatar);
   color: #fff;
   font-size: ${(props) => Math.round(props.$size * 0.4)}px;
   font-weight: 600;

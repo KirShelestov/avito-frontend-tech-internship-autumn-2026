@@ -1,52 +1,61 @@
 import styled from '@emotion/styled';
 
-export const SelectShell = styled.div<{ $fullWidth: boolean; $invalid: boolean }>`
+export const SelectShell = styled.div<{
+  $fullWidth: boolean;
+  $invalid: boolean;
+  $disabled: boolean;
+}>`
   position: relative;
-  display: inline-flex;
+  display: ${(props) => (props.$fullWidth ? 'flex' : 'inline-flex')};
   align-items: center;
-  width: ${(props) => (props.$fullWidth ? '100%' : 'auto')};
-
-  svg {
-    position: absolute;
-    right: var(--space-3);
-    pointer-events: none;
-    color: var(--color-text-muted);
-  }
-`;
-
-export const NativeSelect = styled.select<{ $invalid: boolean; $hasLeftIcon: boolean }>`
-  appearance: none;
-  width: 100%;
-  height: 44px;
-  padding: 0 calc(var(--space-6) + var(--space-2)) 0
-    ${(props) => (props.$hasLeftIcon ? 'calc(var(--space-6) + var(--space-2))' : 'var(--space-3)')};
-  font-size: var(--text-md);
-  color: var(--color-text);
-  background-color: var(--color-surface);
+  gap: 10px;
+  width: ${(props) => (props.$fullWidth ? '100%' : 'fit-content')};
+  height: var(--control-height);
+  padding: 0 var(--space-3) 0 var(--control-padding);
+  font-size: var(--control-font);
+  color: ${(props) => (props.$disabled ? 'var(--color-text-subtle)' : 'var(--color-text)')};
+  background-color: ${(props) => (props.$disabled ? 'var(--color-bg)' : 'var(--color-surface)')};
   border: 1px solid
-    ${(props) => (props.$invalid ? 'var(--color-danger-600)' : 'var(--color-border)')};
+    ${(props) => (props.$invalid ? 'var(--color-danger-500)' : 'var(--color-border)')};
   border-radius: var(--radius-md);
-  cursor: pointer;
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 
-  &:focus-visible {
-    outline: none;
-    border-color: var(--color-brand-500);
-    box-shadow: 0 0 0 3px var(--color-brand-50);
+  &:focus-within {
+    border-color: ${(props) =>
+      props.$invalid ? 'var(--color-danger-500)' : 'var(--color-brand-600)'};
+    box-shadow: 0 0 0 3px
+      ${(props) => (props.$invalid ? 'var(--color-danger-100)' : 'var(--color-brand-50)')};
   }
 
-  &:disabled {
-    background-color: var(--color-surface-muted);
-    cursor: not-allowed;
+  svg {
+    flex-shrink: 0;
+    color: ${(props) =>
+      props.$disabled ? 'var(--color-text-subtle)' : 'var(--color-text-secondary)'};
   }
 `;
 
-export const LeftIcon = styled.span`
+export const Value = styled.span<{ $placeholder: boolean }>`
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  ${(props) => (props.$placeholder ? 'color: var(--color-text-subtle);' : '')}
+`;
+
+/** Нативный select прозрачно лежит поверх: клавиатура, скринридеры и выпадашка остаются родными */
+export const NativeSelect = styled.select`
   position: absolute;
-  left: var(--space-3);
-  display: inline-flex;
-  pointer-events: none;
-  color: var(--color-text-muted);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: var(--text-md);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;

@@ -5,6 +5,7 @@ export * from './breadcrumbs';
 export * from './button';
 export * from './calendar';
 export * from './field';
+export * from './layout';
 export * from './modal';
 export * from './select';
 export * from './skeleton';

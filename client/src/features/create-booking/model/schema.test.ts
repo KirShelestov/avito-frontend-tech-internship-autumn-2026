@@ -50,6 +50,19 @@ describe('createBookingSchema', () => {
     });
   });
 
+  it('ограничивает длину темы с переводимым текстом ошибки', () => {
+    expect(messages({ ...base, title: 'а'.repeat(201) })).toMatchObject({
+      title: 'createBooking.errors.titleTooLong',
+    });
+  });
+
+  it('не даёт закончить серию раньше первой брони', () => {
+    expect(messages({ ...base, repeat: 'daily', repeatUntil: '2026-10-20' })).toMatchObject({
+      repeatUntil: 'createBooking.errors.untilBeforeStart',
+    });
+    expect(messages({ ...base, repeat: 'none', repeatUntil: '2026-10-20' })).toEqual({});
+  });
+
   it('запрещает бронь дальше 30 дней', () => {
     expect(messages({ ...base, date: '2026-12-01' })).toMatchObject({
       date: 'createBooking.errors.tooFar',

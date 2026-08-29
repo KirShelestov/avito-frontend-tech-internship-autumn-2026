@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
-import { forwardRef, useId, type ReactNode, type SelectHTMLAttributes } from 'react';
+import { forwardRef, useId, useState, type ReactNode, type SelectHTMLAttributes } from 'react';
 import { Field } from '../field';
-import { LeftIcon, NativeSelect, SelectShell } from './Select.styles';
+import { NativeSelect, SelectShell, Value } from './Select.styles';
 
 export interface SelectOption {
   value: string;
@@ -19,6 +19,7 @@ export interface SelectProps extends Omit<
   error?: ReactNode;
   fullWidth?: boolean;
   leftIcon?: ReactNode;
+  hideChevron?: boolean;
   /** Плейсхолдер-опция (value = '') */
   placeholder?: string;
   id?: string;
@@ -32,14 +33,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     error,
     fullWidth = false,
     leftIcon,
+    hideChevron = false,
     placeholder,
     required,
     className,
     id,
+    value,
+    defaultValue,
+    onChange,
+    disabled = false,
     ...rest
   },
   ref,
 ) {
+  const [innerValue, setInnerValue] = useState(() =>
+    String(defaultValue ?? (placeholder != null ? '' : (options[0]?.value ?? ''))),
+  );
+  const current = value !== undefined ? String(value) : innerValue;
+  const selected = options.find((option) => option.value === current);
   const autoId = useId();
   const controlId = id ?? autoId;
   const hintId = `${controlId}-hint`;
@@ -58,16 +69,25 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       fullWidth={fullWidth}
       className={className}
     >
-      <SelectShell $fullWidth={fullWidth} $invalid={Boolean(error)}>
-        {leftIcon != null && <LeftIcon aria-hidden="true">{leftIcon}</LeftIcon>}
+      <SelectShell $fullWidth={fullWidth} $invalid={Boolean(error)} $disabled={disabled}>
+        {leftIcon}
+        <Value aria-hidden="true" $placeholder={!selected}>
+          {selected?.label ?? placeholder}
+        </Value>
+        {!hideChevron && <ChevronDown size={16} strokeWidth={2.5} aria-hidden="true" />}
         <NativeSelect
           ref={ref}
           id={controlId}
-          $invalid={Boolean(error)}
-          $hasLeftIcon={leftIcon != null}
+          value={value}
+          defaultValue={defaultValue}
+          disabled={disabled}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           required={required}
+          onChange={(event) => {
+            setInnerValue(event.target.value);
+            onChange?.(event);
+          }}
           {...rest}
         >
           {placeholder != null && (
@@ -81,7 +101,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
             </option>
           ))}
         </NativeSelect>
-        <ChevronDown size={18} aria-hidden="true" />
       </SelectShell>
     </Field>
   );

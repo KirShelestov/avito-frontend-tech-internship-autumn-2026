@@ -7,7 +7,7 @@ export async function resetBackend(request: APIRequestContext): Promise<void> {
   expect(response.ok()).toBeTruthy();
 }
 
-/** Занимает интервал в комнате «Алтай» напрямую через API (для проверки конфликтов/real-time). */
+/** Создаёт бронь напрямую через API для проверки конфликтов и real-time */
 export async function bookViaApi(
   request: APIRequestContext,
   params: { roomId: string; title: string; startsAt: string; endsAt: string },

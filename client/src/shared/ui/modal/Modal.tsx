@@ -7,6 +7,7 @@ import {
   CloseButton,
   Content,
   Description,
+  Divider,
   Footer,
   Header,
   Overlay,
@@ -22,6 +23,7 @@ export interface ModalProps {
   footer?: ReactNode;
   size?: 'sm' | 'md';
   hideCloseButton?: boolean;
+  headerDivider?: boolean;
 }
 
 export function Modal({
@@ -33,6 +35,7 @@ export function Modal({
   footer,
   size = 'md',
   hideCloseButton = false,
+  headerDivider = false,
 }: ModalProps) {
   const { t } = useTranslation();
 
@@ -40,10 +43,11 @@ export function Modal({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Overlay />
-        <Content $size={size} aria-describedby={undefined}>
+        <Content $size={size} {...(description == null ? { 'aria-describedby': undefined } : {})}>
           <Header>
             <Title>{title}</Title>
-            {description != null && <Description>{description}</Description>}
+            {description != null && <Description $size={size}>{description}</Description>}
+            {headerDivider && <Divider />}
           </Header>
 
           {children != null && <Body>{children}</Body>}

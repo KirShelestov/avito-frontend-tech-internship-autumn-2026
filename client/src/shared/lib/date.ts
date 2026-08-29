@@ -73,10 +73,24 @@ export function formatMonthTitle(monthAnchor: string): string {
   return `${capitalize(dt.toFormat('LLLL'))} ${dt.toFormat('yyyy')}`;
 }
 
-/** «24 октября, Чт» */
+const dayAndMonth = (dt: DateTime): string =>
+  `${dt.toFormat('d')} ${capitalize(dt.toFormat('MMMM'))}`;
+
+/** «24 Октября, Чт», как в макетах */
 export function formatDateHuman(iso: string): string {
   const dt = DateTime.fromISO(iso).setLocale('ru');
-  return `${dt.toFormat('d MMMM')}, ${capitalize(stripDot(dt.toFormat('ccc')))}`;
+  return `${dayAndMonth(dt)}, ${capitalize(stripDot(dt.toFormat('ccc')))}`;
+}
+
+/** «24 октября, четверг»: для aria-label, без макетной заглавной буквы */
+export function formatDateSpoken(iso: string): string {
+  return DateTime.fromISO(iso).setLocale('ru').toFormat('d MMMM, cccc');
+}
+
+/** «Четверг, 24 Октября» */
+export function formatDateLong(iso: string): string {
+  const dt = DateTime.fromISO(iso).setLocale('ru');
+  return `${capitalize(dt.toFormat('cccc'))}, ${dayAndMonth(dt)}`;
 }
 
 export function shortWeekdays(): string[] {

@@ -1,4 +1,4 @@
-import { Monitor, PenLine, Users, Video, type LucideIcon } from 'lucide-react';
+import { PenLine, Tv, Users, Video, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -10,7 +10,8 @@ import { NotFoundPage } from '@/pages/not-found';
 import { RoomSchedule } from '@/widgets/room-schedule';
 import { HttpError, type RoomFeature } from '@/shared/api';
 import { todayISODate } from '@/shared/lib/date';
-import { Breadcrumbs, ErrorState, Skeleton } from '@/shared/ui';
+import { useDocumentTitle } from '@/shared/lib/useDocumentTitle';
+import { Breadcrumbs, ErrorState, PageBody, Skeleton } from '@/shared/ui';
 import {
   Columns,
   Crumbs,
@@ -19,19 +20,20 @@ import {
   InfoCard,
   OfficeLine,
   RoomName,
+  SchedulePanel,
 } from './RoomDetailsPage.styles';
 
 const FEATURE_ICONS: Record<string, LucideIcon> = {
-  display: Monitor,
+  display: Tv,
   whiteboard: PenLine,
   video: Video,
 };
 
 function FeatureRow({ feature }: { feature: RoomFeature }) {
-  const Icon = FEATURE_ICONS[feature.code] ?? Monitor;
+  const Icon = FEATURE_ICONS[feature.code] ?? Tv;
   return (
     <FeatureItem>
-      <Icon size={16} />
+      <Icon size={20} />
       {feature.name}
     </FeatureItem>
   );
@@ -45,6 +47,8 @@ export function RoomDetailsPage() {
   const roomQuery = useRoom(roomId);
   const { data: me } = useMe();
   const [bookingOpen, setBookingOpen] = useState(false);
+
+  useDocumentTitle(roomQuery.data?.name);
 
   const timezone = roomQuery.data?.office.timezone ?? 'Europe/Moscow';
   const date = params.get('date') ?? todayISODate(timezone);
@@ -67,33 +71,39 @@ export function RoomDetailsPage() {
 
   if (roomQuery.isPending) {
     return (
-      <Columns>
-        <InfoCard>
-          <Skeleton width="60%" height={26} />
-          <OfficeLine>
-            <Skeleton width="80%" height={14} />
-          </OfficeLine>
-          <FeatureList>
-            {Array.from({ length: 4 }, (_, i) => (
-              <li key={i}>
-                <Skeleton height={14} />
-              </li>
-            ))}
-          </FeatureList>
-        </InfoCard>
-        <Skeleton height={520} />
-      </Columns>
+      <PageBody>
+        <Columns>
+          <InfoCard>
+            <Skeleton width="60%" height={26} />
+            <OfficeLine>
+              <Skeleton width="80%" height={14} />
+            </OfficeLine>
+            <FeatureList>
+              {Array.from({ length: 4 }, (_, i) => (
+                <li key={i}>
+                  <Skeleton height={14} />
+                </li>
+              ))}
+            </FeatureList>
+          </InfoCard>
+          <Skeleton height={760} radius="var(--radius-xl)" />
+        </Columns>
+      </PageBody>
     );
   }
 
   if (roomQuery.isError) {
-    return <ErrorState onRetry={() => void roomQuery.refetch()} />;
+    return (
+      <PageBody>
+        <ErrorState onRetry={() => void roomQuery.refetch()} />
+      </PageBody>
+    );
   }
 
   const room = roomQuery.data;
 
   return (
-    <>
+    <PageBody>
       <Crumbs>
         <Breadcrumbs
           items={[
@@ -112,7 +122,7 @@ export function RoomDetailsPage() {
           </OfficeLine>
           <FeatureList>
             <FeatureItem>
-              <Users size={16} />
+              <Users size={20} />
               {t('roomDetails.capacity', { count: room.capacity })}
             </FeatureItem>
             {room.features.map((feature) => (
@@ -122,13 +132,15 @@ export function RoomDetailsPage() {
         </InfoCard>
 
         {scheduleQuery.isError ? (
-          <ErrorState
-            title={t('schedule.errorTitle')}
-            description={t('schedule.errorText')}
-            onRetry={() => void scheduleQuery.refetch()}
-          />
+          <SchedulePanel>
+            <ErrorState
+              title={t('schedule.errorTitle')}
+              description={t('schedule.errorText')}
+              onRetry={() => void scheduleQuery.refetch()}
+            />
+          </SchedulePanel>
         ) : scheduleQuery.isPending ? (
-          <Skeleton height={520} />
+          <Skeleton height={760} radius="var(--radius-xl)" />
         ) : (
           <RoomSchedule
             bookings={scheduleQuery.data}
@@ -146,6 +158,6 @@ export function RoomDetailsPage() {
       {bookingOpen && (
         <CreateBookingDialog open room={room} initialDate={date} onOpenChange={setBookingOpen} />
       )}
-    </>
+    </PageBody>
   );
 }

@@ -63,14 +63,21 @@ export function snapTime(
   return minutesToTime(clamped);
 }
 
-/** 15 → «15 мин», 75 → «1 ч 15 мин», 120 → «2 ч» */
+const hoursWord = (hours: number): string => {
+  const mod10 = hours % 10;
+  const mod100 = hours % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'час';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'часа';
+  return 'часов';
+};
+
+/** 15 → «15 мин», 60 → «1 час», 75 → «1 ч 15 мин», 120 → «2 часа» */
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  const parts: string[] = [];
-  if (hours > 0) parts.push(`${hours} ч`);
-  if (rest > 0) parts.push(`${rest} мин`);
-  return parts.join(' ') || '0 мин';
+  if (hours === 0) return `${rest} мин`;
+  if (rest === 0) return `${hours} ${hoursWord(hours)}`;
+  return `${hours} ч ${rest} мин`;
 }
 
 export function stepTime(

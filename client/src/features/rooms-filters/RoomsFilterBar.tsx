@@ -55,7 +55,8 @@ export function RoomsFilterBar({
       <Group>
         <GroupLabel>{t('filters.date')}</GroupLabel>
         <DatePickerPopover
-          value={filters.date}
+          value={disabled ? '' : filters.date}
+          placeholder={t('filters.datePlaceholder')}
           minDate={today}
           maxDate={maxDate}
           disabled={disabled}
@@ -67,7 +68,7 @@ export function RoomsFilterBar({
       <Group>
         <GroupLabel>{t('filters.startTime')}</GroupLabel>
         <TimeField
-          value={filters.start}
+          value={disabled ? '' : filters.start}
           disabled={disabled}
           step={STEP_MINUTES}
           minTime={WORKDAY_START}
@@ -81,7 +82,8 @@ export function RoomsFilterBar({
         <GroupLabel>{t('filters.duration')}</GroupLabel>
         <Select
           options={durationOptions}
-          value={String(filters.duration)}
+          placeholder={t('filters.durationPlaceholder')}
+          value={disabled ? '' : String(filters.duration)}
           disabled={disabled}
           aria-label={t('filters.duration')}
           onChange={(e) => {
@@ -96,7 +98,8 @@ export function RoomsFilterBar({
           options={capacityOptions}
           value={filters.capacity ? String(filters.capacity) : ''}
           disabled={disabled}
-          leftIcon={<Users size={16} />}
+          leftIcon={<Users size={18} />}
+          hideChevron
           aria-label={t('filters.capacity')}
           onChange={(e) => {
             onCapacityChange(e.target.value ? Number(e.target.value) : null);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
+import { zoneAbbr } from '@/shared/lib/datetime';
 
 export function useOfficeClock(timezone: string | undefined): { time: string; abbr: string } {
   const [value, setValue] = useState(() => read(timezone));
@@ -19,7 +20,7 @@ export function useOfficeClock(timezone: string | undefined): { time: string; ab
 }
 
 function read(timezone: string | undefined): { time: string; abbr: string } {
-  if (!timezone) return { time: '--:--', abbr: '' };
+  if (!timezone) return { time: '--', abbr: '' };
   const dt = DateTime.now().setZone(timezone);
-  return { time: dt.toFormat('HH:mm'), abbr: dt.toFormat('ZZZZ') };
+  return { time: dt.toFormat('HH:mm'), abbr: zoneAbbr(timezone, dt) };
 }

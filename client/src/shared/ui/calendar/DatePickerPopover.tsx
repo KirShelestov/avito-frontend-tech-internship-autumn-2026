@@ -1,5 +1,5 @@
 import * as Popover from '@radix-ui/react-popover';
-import { CalendarDays } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDateHuman } from '@/shared/lib/date';
@@ -14,6 +14,7 @@ export interface DatePickerPopoverProps {
   placeholder?: string;
   invalid?: boolean;
   disabled?: boolean;
+  fullWidth?: boolean;
   formatLabel?: (iso: string) => ReactNode;
   id?: string;
   className?: string;
@@ -28,6 +29,7 @@ export function DatePickerPopover({
   placeholder,
   invalid = false,
   disabled = false,
+  fullWidth = false,
   formatLabel = formatDateHuman,
   id,
   className,
@@ -42,10 +44,11 @@ export function DatePickerPopover({
         id={id}
         className={className}
         $invalid={invalid}
+        $fullWidth={fullWidth}
         disabled={disabled}
         aria-label={ariaLabel}
       >
-        <CalendarDays size={16} aria-hidden="true" />
+        <CalendarIcon size={18} aria-hidden="true" />
         {value ? formatLabel(value) : (placeholder ?? t('calendar.open'))}
       </Trigger>
       <Popover.Portal>

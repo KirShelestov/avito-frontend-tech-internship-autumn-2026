@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { BookingView } from '@/shared/api';
-import { addDaysISO, formatDateHuman, MAX_ADVANCE_DAYS, todayISODate } from '@/shared/lib/date';
-import { minutesOfDayInZone } from '@/shared/lib/datetime';
+import { addDaysISO, MAX_ADVANCE_DAYS, todayISODate } from '@/shared/lib/date';
+import { formatDateInZone, minutesOfDayInZone, zonedIso } from '@/shared/lib/datetime';
 import { Button, DatePickerPopover } from '@/shared/ui';
 import {
   DAY_END_MIN,
@@ -49,7 +49,7 @@ export function RoomSchedule({
       <Head>
         <div>
           <Title>{t('schedule.heading')}</Title>
-          <DateLabel>{formatDateHuman(date)}</DateLabel>
+          <DateLabel>{formatDateInZone(zonedIso(date, '00:00', timezone), timezone)}</DateLabel>
         </div>
         <DatePickerPopover
           value={date}
@@ -57,6 +57,7 @@ export function RoomSchedule({
           maxDate={addDaysISO(today, MAX_ADVANCE_DAYS)}
           onChange={onDateChange}
           placeholder={t('schedule.pickDate')}
+          formatLabel={() => t('schedule.pickDate')}
           aria-label={t('schedule.pickDate')}
         />
       </Head>
@@ -68,7 +69,7 @@ export function RoomSchedule({
           ))}
         </div>
         <Track>
-          {HOURS.slice(0, -1).map((hour) => (
+          {HOURS.map((hour) => (
             <HourLine key={hour} />
           ))}
           {bookings.map((booking) => {

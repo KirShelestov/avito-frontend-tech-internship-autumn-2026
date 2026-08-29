@@ -26,7 +26,7 @@ export function ErrorState({
     <StatusView
       className={className}
       tone="danger"
-      icon={<AlertTriangle size={40} strokeWidth={2} />}
+      icon={<AlertTriangle size={48} strokeWidth={2} />}
       title={title ?? t('states.loadError')}
       description={description}
       action={

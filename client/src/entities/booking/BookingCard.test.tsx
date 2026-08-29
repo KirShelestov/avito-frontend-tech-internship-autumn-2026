@@ -43,7 +43,8 @@ describe('BookingCard', () => {
     render(<BookingCard booking={booking} />);
     expect(screen.getByRole('heading', { name: /Daily Sync/ })).toBeInTheDocument();
     expect(screen.getByText('Эверест')).toBeInTheDocument();
-    expect(screen.getByText(/15:00 – 16:00/)).toBeInTheDocument();
+    expect(screen.getByText('15:00 - 16:00 MSK')).toBeInTheDocument();
+    expect(screen.getByText('4 этаж')).toBeInTheDocument();
     expect(screen.getByText('24')).toBeInTheDocument();
   });
 

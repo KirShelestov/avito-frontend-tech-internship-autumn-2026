@@ -5,8 +5,20 @@ import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { HttpError, type CreateBookingPayload, type RoomSummary } from '@/shared/api';
-import { addDaysISO, formatDateHuman, MAX_ADVANCE_DAYS, todayISODate } from '@/shared/lib/date';
-import { addMinutesIso, formatDateInZone, formatTimeInZone, zoneAbbr } from '@/shared/lib/datetime';
+import {
+  addDaysISO,
+  formatDateHuman,
+  formatDateLong,
+  MAX_ADVANCE_DAYS,
+  todayISODate,
+} from '@/shared/lib/date';
+import {
+  addMinutesIso,
+  formatDateInZone,
+  formatTimeInZone,
+  zoneAbbr,
+  zonedIso,
+} from '@/shared/lib/datetime';
 import { formatDuration, minutesToTime, timeToMinutes } from '@/shared/lib/time';
 import {
   Button,
@@ -28,6 +40,7 @@ import {
   Preview,
   SeriesLine,
   SeriesResult,
+  Subtitle,
   TwoCols,
 } from './CreateBookingDialog.styles';
 import { createBookingSchema, toStartIso, type BookingFormValues } from './model/schema';
@@ -115,7 +128,7 @@ export function CreateBookingDialog({
 
   const endTime = minutesToTime(startMinutes + duration);
   const previewText = t('createBooking.preview', {
-    date: formatDateHuman(date),
+    date: formatDateLong(date),
     start,
     end: endTime,
     duration: formatDuration(duration),
@@ -224,7 +237,7 @@ export function CreateBookingDialog({
 
   if (seriesSummary) {
     const humanDates = (list: string[]) =>
-      list.map((d) => formatDateInZone(`${d}T00:00:00`, timezone)).join(', ');
+      list.map((d) => formatDateInZone(zonedIso(d, '00:00', timezone), timezone)).join(', ');
     return (
       <Modal
         open={open}
@@ -261,12 +274,15 @@ export function CreateBookingDialog({
     <Modal
       open={open}
       onOpenChange={(next) => (next ? onOpenChange(true) : close())}
+      hideCloseButton
+      headerDivider
       title={t('createBooking.title')}
-      description={t('createBooking.subtitle', {
-        room: room.name,
-        office: room.office.name,
-        floor: room.floor,
-      })}
+      description={
+        <Subtitle>
+          {t('createBooking.subtitleLabel')} <b>{room.name}</b>{' '}
+          {t('createBooking.subtitleDetails', { office: room.office.name, floor: room.floor })}
+        </Subtitle>
+      }
       footer={
         <>
           <Button type="button" variant="secondary" onClick={close}>
@@ -306,6 +322,7 @@ export function CreateBookingDialog({
                   onChange={field.onChange}
                   aria-label={t('createBooking.date')}
                   invalid={Boolean(errors.date)}
+                  fullWidth
                 />
               )}
             />
@@ -323,6 +340,7 @@ export function CreateBookingDialog({
                   onChange={field.onChange}
                   aria-label={t('createBooking.start')}
                   error={err('start')}
+                  fullWidth
                 />
               )}
             />
@@ -375,9 +393,12 @@ export function CreateBookingDialog({
                     maxDate={addDaysISO(today, MAX_ADVANCE_DAYS)}
                     onChange={field.onChange}
                     aria-label={t('createBooking.repeatUntil')}
+                    invalid={Boolean(errors.repeatUntil)}
+                    fullWidth
                   />
                 )}
               />
+              {err('repeatUntil') && <FieldError role="alert">{err('repeatUntil')}</FieldError>}
             </FieldBlock>
           )}
         </TwoCols>
@@ -386,6 +407,7 @@ export function CreateBookingDialog({
           label={t('createBooking.comment')}
           placeholder={t('createBooking.commentPlaceholder')}
           fullWidth
+          error={err('comment')}
           {...register('comment')}
         />
 

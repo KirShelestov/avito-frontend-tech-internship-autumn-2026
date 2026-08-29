@@ -3,19 +3,18 @@ import styled from '@emotion/styled';
 export const FieldRoot = styled.div<{ $fullWidth: boolean }>`
   display: inline-flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   width: ${(props) => (props.$fullWidth ? '100%' : 'auto')};
 `;
 
 export const FieldLabel = styled.label`
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-text-secondary);
 `;
 
 export const RequiredMark = styled.span`
-  color: var(--color-danger-600);
-  margin-left: 2px;
+  margin-left: 4px;
 `;
 
 export const FieldHint = styled.span`
@@ -24,13 +23,23 @@ export const FieldHint = styled.span`
 `;
 
 export const FieldError = styled.span`
+  margin-top: calc(-1 * var(--space-1));
   font-size: var(--text-xs);
-  color: var(--color-danger-600);
+  color: var(--color-danger-500);
+`;
+
+export const invalidControl = `
+  border-color: var(--color-danger-500);
+
+  &:focus-visible {
+    border-color: var(--color-danger-500);
+    box-shadow: 0 0 0 3px var(--color-danger-100);
+  }
 `;
 
 const controlBase = `
   width: 100%;
-  font-size: var(--text-md);
+  font-size: var(--control-font);
   color: var(--color-text);
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -43,28 +52,29 @@ const controlBase = `
 
   &:focus-visible {
     outline: none;
-    border-color: var(--color-brand-500);
+    border-color: var(--color-brand-600);
     box-shadow: 0 0 0 3px var(--color-brand-50);
   }
 
   &:disabled {
-    background-color: var(--color-surface-muted);
+    background-color: var(--color-bg);
+    color: var(--color-text-subtle);
     cursor: not-allowed;
   }
 `;
 
 export const StyledInput = styled.input<{ $invalid: boolean }>`
   ${controlBase}
-  height: 44px;
-  padding: 0 var(--space-3);
-  ${(props) => props.$invalid && 'border-color: var(--color-danger-600);'}
+  height: var(--control-height);
+  padding: 0 var(--control-padding);
+  ${(props) => (props.$invalid ? invalidControl : '')}
 `;
 
 export const StyledTextarea = styled.textarea<{ $invalid: boolean }>`
   ${controlBase}
-  min-height: 96px;
-  padding: var(--space-3);
-  resize: vertical;
+  min-height: 80px;
+  padding: var(--space-3) var(--control-padding);
+  resize: none;
   font-family: inherit;
-  ${(props) => props.$invalid && 'border-color: var(--color-danger-600);'}
+  ${(props) => (props.$invalid ? invalidControl : '')}
 `;

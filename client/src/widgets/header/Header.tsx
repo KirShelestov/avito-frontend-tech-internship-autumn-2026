@@ -3,7 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useMe } from '@/entities/user';
 import { useRealtimeStatus } from '@/features/realtime';
 import { Avatar } from '@/shared/ui';
-import { Bar, Brand, BrandMark, ConnectionDot, Nav, NavItem, UserBox } from './Header.styles';
+import {
+  Bar,
+  Brand,
+  BrandMark,
+  ConnectionDot,
+  Nav,
+  NavItem,
+  UserBox,
+  UserName,
+} from './Header.styles';
 
 /** «Константин Кузнецов» → «Константин К.» */
 function shortName(displayName: string): string {
@@ -41,8 +50,8 @@ export function Header() {
         <ConnectionDot $tone={dot.tone} role="status" aria-label={dot.label} title={dot.label} />
         {me && (
           <>
-            <span>{shortName(me.displayName)}</span>
-            <Avatar name={me.displayName} initials={me.initials} src={me.avatarUrl} />
+            <UserName>{shortName(me.displayName)}</UserName>
+            <Avatar size={38} name={me.displayName} initials={me.initials} src={me.avatarUrl} />
           </>
         )}
       </UserBox>

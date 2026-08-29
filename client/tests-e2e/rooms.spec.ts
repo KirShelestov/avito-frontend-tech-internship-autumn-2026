@@ -56,8 +56,7 @@ test('real-time: новая бронь появляется в открытом 
   await expect(page.getByRole('heading', { name: 'Алтай' })).toBeVisible();
   await expect(page.getByText('E2E: real-time слот')).toHaveCount(0);
 
-  // Бэкенд не различает пользователей, поэтому бронь создаётся от текущего
-  // и в расписании видна по своему заголовку.
+  // Бэкенд не различает пользователей, поэтому бронь создаётся от текущего и видна по заголовку.
   await bookViaApi(request, {
     roomId: 'room-altai',
     title: 'E2E: real-time слот',
@@ -65,6 +64,5 @@ test('real-time: новая бронь появляется в открытом 
     endsAt: futureIso(2, 15),
   });
 
-  // Без reload: WS-событие booking.created инвалидирует расписание комнаты.
   await expect(page.getByText('E2E: real-time слот')).toBeVisible({ timeout: 10_000 });
 });

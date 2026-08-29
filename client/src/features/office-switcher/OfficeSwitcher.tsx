@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Office } from '@/shared/api';
-import { Dot, Meta, NativeSelect, Root, SelectWrap } from './OfficeSwitcher.styles';
+import { Dot, Label, Meta, NativeSelect, Root, SelectWrap } from './OfficeSwitcher.styles';
 import { useOfficeClock } from './useOfficeClock';
 
 export interface OfficeSwitcherProps {
@@ -17,9 +17,10 @@ export function OfficeSwitcher({ offices, selectedOfficeId, onSelect }: OfficeSw
 
   return (
     <Root>
-      <SelectWrap>
+      <SelectWrap $placeholder={!selected}>
+        <Label aria-hidden="true">{selected?.name ?? t('rooms.chooseOffice')}</Label>
+        <ChevronDown size={18} strokeWidth={2.5} aria-hidden="true" />
         <NativeSelect
-          $placeholder={!selected}
           value={selectedOfficeId ?? ''}
           aria-label={t('rooms.chooseOffice')}
           onChange={(event) => {
@@ -35,13 +36,12 @@ export function OfficeSwitcher({ offices, selectedOfficeId, onSelect }: OfficeSw
             </option>
           ))}
         </NativeSelect>
-        <ChevronDown size={20} aria-hidden="true" />
       </SelectWrap>
 
       <Meta>
         <span>{selected?.address ?? t('rooms.addressUnknown')}</span>
         <Dot aria-hidden="true">•</Dot>
-        <span>{t('rooms.localTime', { time, zone: abbr })}</span>
+        <span>{t('rooms.localTime', { time, zone: abbr }).trim()}</span>
       </Meta>
     </Root>
   );

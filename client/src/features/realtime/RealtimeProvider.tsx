@@ -31,10 +31,13 @@ export function RealtimeProvider({
   const [status, setStatus] = useState<RealtimeStatus>(disabled ? 'closed' : 'connecting');
   const [everConnected, setEverConnected] = useState(false);
 
-  const meId = me?.id;
   const pending = useRef(new Map<string, string[]>());
   const flushTimer = useRef<ReturnType<typeof setTimeout>>();
   const everConnectedRef = useRef(false);
+
+  // Через ref, чтобы загрузка профиля или смена языка не пересоздавали WS-соединение
+  const latest = useRef({ meId: me?.id, toast, t });
+  latest.current = { meId: me?.id, toast, t };
 
   useEffect(() => {
     if (disabled) return;
@@ -51,10 +54,10 @@ export function RealtimeProvider({
       if (event.type === 'data.reset') {
         queryClient.clear();
         void queryClient.refetchQueries({ type: 'active' });
-        toast({ tone: 'info', title: t('realtime.dataReset') });
+        latest.current.toast({ tone: 'info', title: latest.current.t('realtime.dataReset') });
         return;
       }
-      for (const key of invalidationsForEvent(event, meId)) {
+      for (const key of invalidationsForEvent(event, latest.current.meId)) {
         pending.current.set(key.join('|'), key);
       }
       if (!flushTimer.current) {
@@ -85,7 +88,7 @@ export function RealtimeProvider({
       if (flushTimer.current) clearTimeout(flushTimer.current);
       client.close();
     };
-  }, [disabled, url, webSocketImpl, queryClient, toast, t, meId]);
+  }, [disabled, url, webSocketImpl, queryClient]);
 
   const value = useMemo(
     () => ({ status, isReconnecting: everConnected && status !== 'open' }),

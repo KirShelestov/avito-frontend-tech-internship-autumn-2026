@@ -38,6 +38,7 @@ describe('datetime: работа с таймзоной офиса', () => {
   });
 
   it('zoneAbbr: короткая аббревиатура', () => {
-    expect(zoneAbbr('Europe/Moscow', undefined)).toMatch(/MSK|GMT\+3/);
+    expect(zoneAbbr('Europe/Moscow', undefined)).toBe('MSK');
+    expect(zoneAbbr('Europe/Berlin', undefined)).toMatch(/^(CET|CEST|GMT\+[12])$/);
   });
 });

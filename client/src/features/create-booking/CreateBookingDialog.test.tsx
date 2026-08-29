@@ -47,7 +47,7 @@ describe('CreateBookingDialog', () => {
   it('показывает заголовок и подзаголовок с комнатой', () => {
     renderDialog();
     expect(screen.getByRole('dialog')).toHaveAccessibleName('Новое бронирование');
-    expect(screen.getByText(/Переговорная: Алтай/)).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toHaveAccessibleDescription(/Переговорная: Алтай/);
   });
 
   it('без темы встречи не отправляет и показывает ошибку', async () => {

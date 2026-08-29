@@ -1,36 +1,39 @@
 :root {
-  --color-brand-50: #eaf9f3;
-  --color-brand-100: #d9f5ec;
-  --color-brand-500: #159b83;
-  --color-brand-600: #0e7c6b;
-  --color-brand-700: #0b6357;
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
 
-  --color-danger-100: #fde8e8;
-  --color-danger-500: #ef4b52;
-  --color-danger-600: #e5484d;
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
 
-  --color-text: #16242b;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
   --color-text-muted: #64748b;
   --color-text-subtle: #94a3b8;
-  --color-bg: #f6f8fa;
+  --color-bg: #f8fafc;
   --color-surface: #ffffff;
-  --color-surface-muted: #f1f4f7;
-  --color-border: #e6ebef;
+  --color-surface-muted: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-avatar: #5478d9;
 
   --color-warning-bg: #fbe9a8;
   --color-warning-text: #7a5a00;
-  --color-available-bg: #d9f5ec;
-  --color-available-text: #0b6357;
-  --color-busy-bg: #eef1f4;
-  --color-busy-text: #64748b;
+  --color-available-bg: #ccfbf1;
+  --color-available-text: #0f766e;
+  --color-busy-bg: #e2e8f0;
+  --color-busy-text: #475569;
 
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
-  --shadow-pop: 0 8px 24px rgba(16, 24, 40, 0.12);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-pop: 0 20px 40px rgba(15, 23, 42, 0.16);
 
   --space-1: 4px;
   --space-2: 8px;
@@ -42,14 +45,22 @@
   --space-10: 40px;
   --space-12: 48px;
 
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-sans:
+    'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
   --text-xs: 12px;
   --text-sm: 14px;
+  --text-base: 15px;
   --text-md: 16px;
-  --text-lg: 20px;
-  --text-xl: 28px;
-  --text-2xl: 40px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 28px;
 
-  --container-max: 1200px;
-  --header-height: 64px;
+  --container-max: 1440px;
+  --page-gutter: 40px;
+  --header-height: 70px;
+  --control-height: 38px;
+  --control-padding: 14px;
+  --control-font: 14px;
 }

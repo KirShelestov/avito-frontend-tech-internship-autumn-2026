@@ -5,6 +5,8 @@ import {
   clampISODate,
   diffInDays,
   formatDateHuman,
+  formatDateLong,
+  formatDateSpoken,
   formatMonthTitle,
   shortWeekdays,
 } from './date';
@@ -50,7 +52,9 @@ describe('formatMonthTitle', () => {
 
 describe('formatDateHuman', () => {
   it('форматирует дату по-русски', () => {
-    expect(formatDateHuman('2026-10-22')).toBe('22 октября, Чт');
+    expect(formatDateHuman('2026-10-22')).toBe('22 Октября, Чт');
+    expect(formatDateLong('2026-10-22')).toBe('Четверг, 22 Октября');
+    expect(formatDateSpoken('2026-10-22')).toBe('22 октября, четверг');
   });
 });
 

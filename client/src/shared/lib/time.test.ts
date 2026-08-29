@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  formatDuration,
   isAlignedToStep,
   maskTimeInput,
   minutesToTime,
@@ -86,5 +87,16 @@ describe('stepTime', () => {
 
   it('не выходит за границы', () => {
     expect(stepTime('19:45', 5, 15, min, max)).toBe('20:00');
+  });
+});
+
+describe('formatDuration', () => {
+  it('пишет целые часы словом, как в макете', () => {
+    expect(formatDuration(15)).toBe('15 мин');
+    expect(formatDuration(60)).toBe('1 час');
+    expect(formatDuration(75)).toBe('1 ч 15 мин');
+    expect(formatDuration(120)).toBe('2 часа');
+    expect(formatDuration(300)).toBe('5 часов');
+    expect(formatDuration(21 * 60)).toBe('21 час');
   });
 });

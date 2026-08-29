@@ -18,7 +18,7 @@ test('создание брони: тост об успехе и появлен�
   await dialog.getByLabel('Время начала').blur();
   await dialog.getByRole('button', { name: 'Забронировать' }).click();
 
-  await expect(page.getByText('Бронирование создано')).toBeVisible();
+  await expect(page.getByText('Бронирование создано', { exact: true })).toBeVisible();
 
   await page.getByRole('link', { name: 'Мои бронирования' }).click();
   await expect(page.getByText('E2E: обсуждение плана')).toBeVisible();
@@ -33,7 +33,7 @@ test('отмена брони: подтверждение, тост, отсут�
   const confirm = page.getByRole('dialog', { name: 'Отменить бронирование?' });
   await confirm.getByRole('button', { name: 'Да, отменить' }).click();
 
-  await expect(page.getByText('Бронирование отменено')).toBeVisible();
+  await expect(page.getByText('Бронирование отменено', { exact: true })).toBeVisible();
   await expect(page.getByText('Ежедневная встреча команды')).toHaveCount(0);
 
   await page.reload();

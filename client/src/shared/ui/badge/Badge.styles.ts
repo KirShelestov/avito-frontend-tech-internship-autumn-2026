@@ -25,9 +25,9 @@ export const BadgeRoot = styled.span<{ $tone: BadgeTone; $block: boolean }>`
   display: ${(props) => (props.$block ? 'flex' : 'inline-flex')};
   align-items: center;
   gap: var(--space-2);
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  font-size: var(--text-sm);
+  ${(props) => (props.$block ? 'height: 36px; padding: 0 var(--space-3);' : 'padding: 4px 10px;')}
+  border-radius: var(--radius-md);
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.2;
   ${(props) => toneStyles[props.$tone]}

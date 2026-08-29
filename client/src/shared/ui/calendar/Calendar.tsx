@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   addDaysISO,
   buildMonthGrid,
-  formatDateHuman,
+  formatDateSpoken,
   formatMonthTitle,
   shortWeekdays,
   todayISODate,
@@ -84,7 +84,7 @@ export function Calendar({ value, onChange, minDate, maxDate, className }: Calen
               $outside={!cell.inCurrentMonth}
               $today={cell.iso === today}
               disabled={isDisabled(cell.iso)}
-              aria-label={formatDateHuman(cell.iso)}
+              aria-label={formatDateSpoken(cell.iso)}
               aria-pressed={selected}
               aria-current={cell.iso === today ? 'date' : undefined}
               onClick={() => onChange(cell.iso)}

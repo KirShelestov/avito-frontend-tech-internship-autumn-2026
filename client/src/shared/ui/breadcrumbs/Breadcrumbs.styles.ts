@@ -8,7 +8,7 @@ export const List = styled.ol`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
+  gap: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -17,11 +17,12 @@ export const List = styled.ol`
 export const Item = styled.li`
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 10px;
   color: var(--color-text-muted);
 `;
 
 export const Separator = styled.span`
+  display: inline-flex;
   color: var(--color-text-subtle);
 `;
 

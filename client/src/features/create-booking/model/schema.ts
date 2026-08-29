@@ -41,15 +41,27 @@ export function createBookingSchema({ timezone, now }: SchemaContext) {
 
   return z
     .object({
-      title: z.string().trim().min(1, 'field.required').max(200),
-      date: z.string().min(1),
-      start: z.string().regex(/^\d{2}:\d{2}$/),
+      title: z
+        .string()
+        .trim()
+        .min(1, 'field.required')
+        .max(200, 'createBooking.errors.titleTooLong'),
+      date: z.string().min(1, 'field.required'),
+      start: z.string().regex(/^\d{2}:\d{2}$/, 'field.required'),
       duration: z.number().int().positive(),
-      comment: z.string().trim().max(2000),
+      comment: z.string().trim().max(2000, 'createBooking.errors.commentTooLong'),
       repeat: z.enum(['none', 'daily', 'weekly', 'weekdays']),
       repeatUntil: z.string(),
     })
     .superRefine((values, ctx) => {
+      if (values.repeat !== 'none' && values.repeatUntil < values.date) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['repeatUntil'],
+          message: 'createBooking.errors.untilBeforeStart',
+        });
+      }
+
       const startDt = DateTime.fromISO(toStartIso(values, timezone), { setZone: true });
       if (!startDt.isValid) {
         ctx.addIssue({

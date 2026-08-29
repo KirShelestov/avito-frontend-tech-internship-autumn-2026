@@ -31,7 +31,6 @@ export default defineConfig({
         'src/shared/test/**',
         'src/shared/ui/story-helpers.styles.ts',
       ],
-      // Ориентир, а не жёсткий гейт: проверяется локально
       thresholds: {
         statements: 80,
         branches: 75,

@@ -35,7 +35,7 @@ export function TimeField({
   step = 15,
   minTime = '09:00',
   maxTime = '19:45',
-  placeholder = 'чч:мм',
+  placeholder = '--:--',
   id,
   className,
   'aria-label': ariaLabel,
@@ -88,9 +88,10 @@ export function TimeField({
     >
       <Shell $fullWidth={fullWidth}>
         <LeftIcon aria-hidden="true">
-          <Clock size={16} />
+          <Clock size={18} />
         </LeftIcon>
         <StyledTimeInput
+          $fullWidth={fullWidth}
           id={controlId}
           type="text"
           inputMode="numeric"

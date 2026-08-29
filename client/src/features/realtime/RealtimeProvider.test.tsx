@@ -45,10 +45,28 @@ function renderProvider() {
     </QueryClientProvider>,
   );
 
-  return { invalidateSpy, clearSpy };
+  return { queryClient, invalidateSpy, clearSpy };
 }
 
 describe('RealtimeProvider', () => {
+  it('не переподключается, когда догружается профиль', async () => {
+    let connections = 0;
+    server.on('connection', () => {
+      connections += 1;
+    });
+    const { queryClient, invalidateSpy } = renderProvider();
+    await waitFor(() => {
+      expect(screen.getByTestId('status')).toHaveTextContent('open');
+    });
+
+    queryClient.setQueryData(['me'], { id: 'u1', displayName: 'Константин Кузнецов' });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(connections).toBe(1);
+    expect(screen.getByTestId('status')).toHaveTextContent('open');
+    expect(invalidateSpy).not.toHaveBeenCalled();
+  });
+
   it('подключается и отдаёт статус open', async () => {
     renderProvider();
     await waitFor(() => {

@@ -69,7 +69,19 @@ export function formatDateInZone(iso: string, zone: string): string {
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${dt.toFormat('d MMMM')}`;
 }
 
+// Intl для российских зон отдаёт «GMT+3», а в макетах привычные аббревиатуры
+const ZONE_ABBR: Record<string, string> = {
+  'Europe/Moscow': 'MSK',
+  'Europe/Samara': 'SAMT',
+  'Asia/Yekaterinburg': 'YEKT',
+  'Asia/Omsk': 'OMST',
+  'Asia/Novosibirsk': 'NOVT',
+  'Asia/Krasnoyarsk': 'KRAT',
+  'Asia/Irkutsk': 'IRKT',
+  'Asia/Vladivostok': 'VLAT',
+};
+
 /** Например, «MSK» */
 export function zoneAbbr(zone: string, reference: DateTime = now()): string {
-  return reference.setZone(zone).toFormat('ZZZZ');
+  return ZONE_ABBR[zone] ?? reference.setZone(zone).setLocale('en-US').toFormat('ZZZZ');
 }

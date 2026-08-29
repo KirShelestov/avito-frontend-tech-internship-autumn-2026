@@ -10,7 +10,11 @@ export interface RealtimeClientOptions {
   onStatusChange?: (status: RealtimeStatus) => void;
   /** Задержки переподключения в мс, последнее значение повторяется */
   backoffMs?: number[];
-  /** Если сообщений нет дольше этого времени, делаем принудительный реконнект */
+  /**
+   * Если сообщений нет дольше этого времени, делаем принудительный реконнект.
+   * По умолчанию выключено: бэкенд шлёт только протокольные ping-фреймы,
+   * а браузер их в onmessage не отдаёт, и тихое соединение рвалось бы каждые N секунд.
+   */
   heartbeatTimeoutMs?: number;
   WebSocketImpl?: WebSocketCtor;
   /** Возвращает число из [0, 1), в тестах подменяется для детерминизма */
@@ -31,7 +35,7 @@ export function createRealtimeClient(options: RealtimeClientOptions): RealtimeCl
     onEvent,
     onStatusChange,
     backoffMs = DEFAULT_BACKOFF,
-    heartbeatTimeoutMs = 35_000,
+    heartbeatTimeoutMs,
     WebSocketImpl = globalThis.WebSocket,
     jitter = Math.random,
   } = options;
@@ -58,6 +62,7 @@ export function createRealtimeClient(options: RealtimeClientOptions): RealtimeCl
 
   const armHeartbeat = () => {
     if (heartbeatTimer) clearTimeout(heartbeatTimer);
+    if (heartbeatTimeoutMs === undefined) return;
     heartbeatTimer = setTimeout(() => {
       socket?.close();
     }, heartbeatTimeoutMs);

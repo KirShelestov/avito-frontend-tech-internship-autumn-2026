@@ -14,17 +14,28 @@ const variantStyles: Record<ButtonVariant, string> = {
     background-color: var(--color-brand-600);
     color: #fff;
     &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-brand-700); }
+    &:disabled, &[aria-disabled='true'] {
+      background-color: var(--color-surface-muted);
+      color: var(--color-text-subtle);
+      opacity: 1;
+    }
   `,
   secondary: `
     background-color: var(--color-surface);
     border-color: var(--color-border);
-    color: var(--color-text);
-    &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-surface-muted); }
+    color: var(--color-text-secondary);
+    &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-bg); }
   `,
   danger: `
-    background-color: var(--color-danger-600);
+    background-color: var(--color-danger-500);
     color: #fff;
-    &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-danger-500); }
+    &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-danger-600); }
+  `,
+  'danger-outline': `
+    background-color: var(--color-surface);
+    border-color: var(--color-danger-500);
+    color: var(--color-danger-500);
+    &:hover:not(:disabled):not([aria-disabled='true']) { background-color: var(--color-danger-100); }
   `,
   ghost: `
     background-color: transparent;
@@ -41,13 +52,14 @@ const buttonCss = (props: ButtonStyleProps): string => `
   gap: var(--space-2);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   white-space: nowrap;
   text-decoration: none;
   width: ${props.$fullWidth ? '100%' : 'auto'};
-  padding: ${props.$size === 'sm' ? '8px 14px' : '12px 20px'};
-  font-size: ${props.$size === 'sm' ? 'var(--text-sm)' : 'var(--text-md)'};
+  height: ${props.$size === 'sm' ? '36px' : 'var(--control-height)'};
+  padding: 0 ${props.$size === 'sm' ? 'var(--space-3)' : 'var(--space-5)'};
+  font-size: var(--text-sm);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
