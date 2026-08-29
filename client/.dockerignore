@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-ssr
+coverage
+storybook-static
+playwright-report
+test-results
+.git
+*.log

@@ -23,4 +23,16 @@ cd server && npm ci && npm run dev      # http://localhost:3000
 cd client && npm ci && cp .env.example .env && npm run dev   # http://localhost:5173
 ```
 
+### Через Docker
+
+Оба сервиса поднимаются одной командой, с hot-reload (код примонтирован в контейнеры):
+
+```bash
+docker compose up            # http://localhost:5173 (фронт) + http://localhost:3000 (API)
+docker compose up --build    # пересобрать образы после правок package.json
+docker compose down          # остановить
+```
+
+Порт `3000` на хосте должен быть свободен.
+
 Подробности по клиенту в [`client/README.md`](./client/README.md).
