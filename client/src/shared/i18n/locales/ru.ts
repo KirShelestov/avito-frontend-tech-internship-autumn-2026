@@ -42,6 +42,10 @@ export const ru = {
     field: {
       required: 'Обязательное поле',
     },
+    realtime: {
+      dataReset: 'Данные обновлены',
+      reconnecting: 'Соединение потеряно. Переподключение…',
+    },
     breadcrumbs: {
       label: 'Навигационная цепочка',
     },
