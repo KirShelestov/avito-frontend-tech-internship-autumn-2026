@@ -5,9 +5,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BookingCard, useMyBookings } from '@/entities/booking';
 import { useOffices } from '@/entities/office';
 import { CancelBookingDialog } from '@/features/cancel-booking';
+import { ExportIcsButton } from '@/features/ics-export';
 import type { BookingScope, BookingView } from '@/shared/api';
 import { Button, EmptyState, ErrorState, Select, Skeleton, Tabs } from '@/shared/ui';
-import { HeadRow, Heading, List, OfficeFilter } from './BookingsPage.styles';
+import { HeadActions, HeadRow, Heading, List, OfficeFilter } from './BookingsPage.styles';
 
 export function BookingsPage() {
   const { t } = useTranslation();
@@ -44,17 +45,22 @@ export function BookingsPage() {
     <>
       <HeadRow>
         <Heading>{t('bookings.heading')}</Heading>
-        <OfficeFilter>
-          <Select
-            options={officeOptions}
-            value={officeId ?? ''}
-            aria-label={t('bookings.allOffices')}
-            fullWidth
-            onChange={(e) => {
-              patch('office', e.target.value || null);
-            }}
-          />
-        </OfficeFilter>
+        <HeadActions>
+          {listQuery.data && listQuery.data.length > 0 && (
+            <ExportIcsButton bookings={listQuery.data} bulk />
+          )}
+          <OfficeFilter>
+            <Select
+              options={officeOptions}
+              value={officeId ?? ''}
+              aria-label={t('bookings.allOffices')}
+              fullWidth
+              onChange={(e) => {
+                patch('office', e.target.value || null);
+              }}
+            />
+          </OfficeFilter>
+        </HeadActions>
       </HeadRow>
 
       <Tabs
@@ -103,6 +109,7 @@ export function BookingsPage() {
                 booking={booking}
                 cancellable={scope === 'upcoming'}
                 onCancel={setCancelTarget}
+                extraActions={<ExportIcsButton bookings={[booking]} />}
               />
             ))}
           </List>

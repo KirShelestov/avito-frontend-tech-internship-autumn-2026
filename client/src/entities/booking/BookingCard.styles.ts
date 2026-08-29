@@ -51,6 +51,13 @@ export const Title = styled.h3`
   white-space: nowrap;
 `;
 
+export const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+`;
+
 export const Meta = styled.p`
   display: flex;
   align-items: center;

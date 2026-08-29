@@ -105,6 +105,12 @@ export const ru = {
       crumbRoom: 'Комната «{{name}}»',
       capacity: 'Вместимость: до {{count}} человек',
     },
+    ics: {
+      exportOne: 'В календарь',
+      exportOneAria: 'Скачать «{{title}}» в календарь (.ics)',
+      exportAll: 'Скачать всё (.ics)',
+      allFileBase: 'бронирования',
+    },
     bookings: {
       heading: 'Мои бронирования',
       allOffices: 'Все офисы',

@@ -21,6 +21,13 @@ export const List = styled.div`
   margin-top: var(--space-6);
 `;
 
+export const HeadActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+`;
+
 export const OfficeFilter = styled.div`
   min-width: 200px;
 `;
