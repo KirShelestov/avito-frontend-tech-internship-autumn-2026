@@ -5,6 +5,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { makeTestQueryClient } from '@/shared/test/renderWithProviders';
 import { setupMswServer } from '@/shared/test/setup-msw';
+import { ToastProvider } from '@/shared/ui/toast';
 import { routes } from './routes';
 
 setupMswServer();
@@ -16,7 +17,9 @@ function renderApp(initialPath: string) {
     user: userEvent.setup(),
     ...render(
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
       </QueryClientProvider>,
     ),
   };

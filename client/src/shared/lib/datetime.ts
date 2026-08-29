@@ -56,6 +56,19 @@ export function minutesOfDayInZone(iso: string, zone: string): number {
   return dt.hour * 60 + dt.minute;
 }
 
+/** Месяц прописью и число для «плашки» в списке броней */
+export function dayCellParts(iso: string, zone: string): { month: string; day: string } {
+  const dt = DateTime.fromISO(iso).setZone(zone).setLocale('ru');
+  return { month: dt.toFormat('LLLL').toUpperCase(), day: dt.toFormat('d') };
+}
+
+/** «Четверг, 24 октября» */
+export function formatDateInZone(iso: string, zone: string): string {
+  const dt = DateTime.fromISO(iso).setZone(zone).setLocale('ru');
+  const weekday = dt.toFormat('cccc');
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${dt.toFormat('d MMMM')}`;
+}
+
 /** Например, «MSK» */
 export function zoneAbbr(zone: string, reference: DateTime = now()): string {
   return reference.setZone(zone).toFormat('ZZZZ');
